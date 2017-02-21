@@ -20,21 +20,7 @@ safeParseJSON = (s) ->
   catch
     false
 
-raf = (
-  window.requestAnimationFrame or
-  window.mozRequestAnimationFrame or
-  window.webkitRequestAnimationFrame or
-  window.oRequestAnimationFrame
-)
-
-caf = (
-  window.cancelAnimationFrame or
-  window.mozcancelAnimationFrame or
-  window.webkitcancelAnimationFrame or
-  window.ocancelAnimationFrame
-)
-
-root.LanguageDector = class LanguageDector
+class LanguageDetector
   constructor: ->
     @codes = safeParseJSON "[[76,97,116,105,110],
     [27721,23383],
@@ -76,38 +62,16 @@ root.LanguageDector = class LanguageDector
 
     @fontSize = 20
     @extraHeigth = 15
-    @height = @fontSize + @extraHeigth
-    @width = 100
-    @canvas = $("<canvas height='#{@height}' width='#{@width}'/>").appendTo $('#test_canvases')
-    @ctx = @canvas[0].getContext '2d'
-
     @results = []
 
-  begin: (@cb) ->
-    tester = (index) =>
-      if index is @codes.length
-        console.log "Lang done"
-        sender.postLangsDetected @results
-        @cb()
-      else
-        text = ""
-        for c in @codes[index]
-          text += String.fromCharCode c
+  begin: ->
+    @div = document.createElement("div")
+    document.body.appendChild(@div)
+    @div.id = "test_div"
+    for code in @codes
+      for c in code
+        @div.innerHTML += "&#" + c
+      @div.innerHTML += "<br>"
 
-        @ctx.fillStyle = "white"
-        @ctx.fillRect 0, 0, @width, @height
-        @ctx.fillStyle = "black"
-        @ctx.font = "#{@fontSize}px sans-serif"
-        @ctx.fillText text, 5,  @height - @extraHeigth/2.0
-
-        @results.push
-          w: @width
-          h: @height
-          pixels: stringify @ctx.getImageData(0, 0, @width, @height).data
-
-        raf ->
-          tester index + 1
-
-    raf ->
-      tester 0
-
+detector = new LanguageDetector
+detector.begin()
