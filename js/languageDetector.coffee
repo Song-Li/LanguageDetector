@@ -22,18 +22,57 @@ safeParseJSON = (s) ->
 
 class LanguageDetector
   constructor: ->
-    @codes = safeParseJSON "[[76,97,116,105,110],
-    [27721,23383],
-    [1575,1604,1593,1585,1576,1610,1577],
-    [2342,2375,2357,2344,2366,2327,2352,2368],
-    [1050,1080,1088,1080,1083,1080,1094,1072],
-    [2476,2494,2434,2482,2494,32,47,32,2437,2488,2478,2496,2479,2492,2494],
-    [20206,21517],
+    @names = safeParseJSON '[
+    "Latin",
+    "Chinese",
+    "Arabic",
+    "Devanagari",
+    "Cyrillic",
+    "Bengali/Assamese",
+    "Kana",
+    "Gurmukhi",
+    "Javanese",
+    "Hangul",
+    "Telugu",
+    "Tamil",
+    "Malayalam",
+    "Burmese",
+    "Thai",
+    "Sundanese",
+    "Kannada",
+    "Gujarati",
+    "Lao",
+    "Odia",
+    "Ge-ez",
+    "Sinhala",
+    "Armenian",
+    "Khmer",
+    "Greek",
+    "Lontara",
+    "Hebrew",
+    "Tibetan",
+    "Georgian",
+    "Modern Yi",
+    "Mongolian",
+    "Tifinagh",
+    "Syriac",
+    "Thaana",
+    "Inuktitut",
+    "Cherokee"
+    ]'
+    
+    @codes = safeParseJSON "[[76,97,116,105,110], 
+    [27721,23383], 
+    [1575,1604,1593,1585,1576,1610,1577], 
+    [2342,2375,2357,2344,2366,2327,2352,2368], 
+    [1050,1080,1088,1080,1083,1080,1094,1072], 
+    [2476,2494,2434,2482,2494,32,47,32,2437,2488,2478,2496,2479,2492,2494], 
+    [20206,21517], 
     [2583,2625,2608,2606,2625,2582,2624],
     [43415,43438],
     [54620,44544],
     [3108,3142,3122,3137,3095,3137],
-    [2980,2990,3007,2996,3021],
+    [2980,2990,3007,2996,3021], 
     [3374,3378,3375,3390,3379,3330],
     [4121,4156,4116,4154,4121,4140],
     [3652,3607,3618],
@@ -60,18 +99,84 @@ class LanguageDetector
     [5091,5043,5033],
     [55295]]"
 
-    @fontSize = 20
+    @fontSize = 9
     @extraHeigth = 15
     @results = []
 
-  begin: ->
-    @div = document.createElement("div")
-    document.body.appendChild(@div)
-    @div.id = "test_div"
-    for code in @codes
-      for c in code
-        @div.innerHTML += "&#" + c
-      @div.innerHTML += "<br>"
 
-detector = new LanguageDetector
-detector.begin()
+
+  begin: ->
+    round = 0
+    @widths = []
+    @heights = []
+    @support = []
+
+    @test_div = document.createElement "div"
+    document.body.appendChild @test_div
+    @test_div.id = "WritingTest"
+
+    for code in @codes
+      #clear the tmp array
+      @height = []
+      @width = []
+      #generate div
+      @div = document.createElement "div"
+      @test_div.appendChild @div
+      round += 1
+      @div.id = round
+      @div.style.display = "inline-block"
+      for c in code
+        @div.innerHTML = "<font size = " + @fontSize + ">&#" + c + "</font>"
+        @height.push document.getElementById(round).clientHeight
+        @width.push document.getElementById(round).clientWidth
+
+      @div.innerHTML = ""
+      for c in code
+        @div.innerHTML += "<font size = " + @fontSize + ">&#" + c + "</font>"
+
+      @test_div.innerHTML += "<br>"
+      @heights.push @height
+      @widths.push @width 
+        
+    #standard width
+    @sw = @widths.pop()[0]
+    #standard height
+    @sh = @heights.pop()[0]
+
+    #check the height
+    for height in @heights
+      @passed = 0
+      for h in height
+        if h != @sh
+          @support.push true
+          @passed = 1
+          break
+      if @passed == 0
+        @support.push false 
+    
+    #check the width
+    @writing_scripts_index = 0
+    for width in @widths
+      for w in width
+        if @support[@writing_scripts_index] == false
+          if w != @sw
+            @support[@writing_scripts_index] = true
+      @writing_scripts_index += 1
+
+
+    @res = []
+    @writing_scripts_index = 0
+    for s in @support  
+      @test_div.innerHTML += "#{@names[@writing_scripts_index]}: #{s} <br>"
+      if s == true
+        @res.push @names[@writing_scripts_index]
+      @writing_scripts_index += 1
+
+    @test_div.remove()
+    @res
+
+
+root.get_writing_scripts = ->
+  detector = new LanguageDetector
+  @res = detector.begin()
+  console.log @res
