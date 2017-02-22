@@ -179,4 +179,3 @@ class LanguageDetector
 root.get_writing_scripts = ->
   detector = new LanguageDetector
   @res = detector.begin()
-  console.log @res

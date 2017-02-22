@@ -124,8 +124,7 @@ sort of box
   root.get_writing_scripts = function() {
     var detector;
     detector = new LanguageDetector;
-    this.res = detector.begin();
-    return console.log(this.res);
+    return this.res = detector.begin();
   };
 
 }).call(this);
