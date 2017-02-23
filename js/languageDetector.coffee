@@ -100,6 +100,7 @@ class LanguageDetector
     [55295]]"
 
     @fontSize = 9
+    @fontFace = "Verdana"
     @extraHeigth = 15
     @results = []
 
@@ -126,15 +127,15 @@ class LanguageDetector
       @div.id = round
       @div.style.display = "inline-block"
       for c in code
-        @div.innerHTML = "<font size = " + @fontSize + ">&#" + c + "</font>"
+        @div.innerHTML = "<font face = '#{@fontFace}' size = " + @fontSize + ">&#" + c + "</font>"
         @height.push document.getElementById(round).clientHeight
         @width.push document.getElementById(round).clientWidth
 
       @div.innerHTML = ""
       for c in code
-        @div.innerHTML += "<font size = " + @fontSize + ">&#" + c + "</font>"
+        @div.innerHTML += "<font face = '#{@fontFace}' size = " + @fontSize + ">&#" + c + "</font>"
 
-      @test_div.innerHTML += "<br>"
+      @test_div.innerHTML += @height + ";" + @width + "<br>"
       @heights.push @height
       @widths.push @width 
         
@@ -172,7 +173,7 @@ class LanguageDetector
         @res.push @names[@writing_scripts_index]
       @writing_scripts_index += 1
 
-    @test_div.remove()
+  #  @test_div.remove()
     @res
 
 
