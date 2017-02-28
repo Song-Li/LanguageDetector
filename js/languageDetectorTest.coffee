@@ -176,7 +176,7 @@ class LanguageDetector
         @res.push @names[@writing_scripts_index]
       @writing_scripts_index += 1
 
-    @test_div.remove()
+  #  @test_div.remove()
     @res
 
 

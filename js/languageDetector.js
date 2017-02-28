@@ -116,6 +116,7 @@ sort of box
         }
         this.writing_scripts_index += 1;
       }
+      this.test_div.remove();
       return this.res;
     };
 
