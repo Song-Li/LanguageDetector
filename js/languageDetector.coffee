@@ -97,7 +97,7 @@ class LanguageDetector
     [1931,1960,1928,1964,1920,1960],
     [5123,5316,5251,5198,5200,5222],
     [5091,5043,5033],
-    [55295], [7077]]" #may need a new code for 7077
+    [55295, 7077]]" #may need a new code for 7077
 
     @fontSize = 9
     @fontFace = "Verdana"
