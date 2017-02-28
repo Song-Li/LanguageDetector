@@ -97,7 +97,7 @@ class LanguageDetector
     [1931,1960,1928,1964,1920,1960],
     [5123,5316,5251,5198,5200,5222],
     [5091,5043,5033],
-    [55295]]"
+    [55295], [7077]]" #may need a new code for 7077
 
     @fontSize = 9
     @fontFace = "Verdana"
@@ -140,7 +140,10 @@ class LanguageDetector
       @widths.push @width 
         
     #standard width
-    @sw = @widths.pop()[0]
+    #maybe with a circle
+    @tw = @widths.pop()
+    @sw1 = @tw[0]
+    @sw2 = tw[1]
     #standard height
     @sh = @heights.pop()[0]
 
@@ -160,7 +163,7 @@ class LanguageDetector
     for width in @widths
       for w in width
         if @support[@writing_scripts_index] == false
-          if w != @sw
+          if w != @sw1 && w != @sw2
             @support[@writing_scripts_index] = true
       @writing_scripts_index += 1
 
