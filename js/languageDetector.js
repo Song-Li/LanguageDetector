@@ -73,7 +73,7 @@ sort of box
       }
       this.tw = this.widths.pop();
       this.sw1 = this.tw[0];
-      this.sw2 = tw[1];
+      this.sw2 = this.tw[1];
       this.sh = this.heights.pop()[0];
       ref1 = this.heights;
       for (l = 0, len3 = ref1.length; l < len3; l++) {

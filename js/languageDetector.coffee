@@ -143,7 +143,7 @@ class LanguageDetector
     #maybe with a circle
     @tw = @widths.pop()
     @sw1 = @tw[0]
-    @sw2 = tw[1]
+    @sw2 = @tw[1]
     #standard height
     @sh = @heights.pop()[0]
 
